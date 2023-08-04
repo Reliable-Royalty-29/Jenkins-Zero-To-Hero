@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
-    <link data-th-href="@{/css/main.css?{id}(id=${timestamp})}" rel="stylesheet">
-    <title>CI/CD Master Class By Abhishek Veeramalla</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Website</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>Travelo</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Destinations</a></li>
+        <li><a href="#">Packages</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Ultimate CI/CD Pipeline using Java</div></a>
-</nav>
+  <main>
+    <section class="hero">
+      <h2>Discover Your Dream Destination</h2>
+      <a href="#" class="btn">Explore Now</a>
+    </section>
 
-<main role="main" class="container">
-    <div class="starter-template">
-        <h1 th:text="${title}">Default title.</h1>
-        <p th:text="${msg}">Default text.</p>
-    </div>
-</main>
+    <section class="destinations">
+      <h2>Popular Destinations</h2>
+      <div class="destination">
+        <img src="destination1.jpg" alt="Destination 1">
+        <h3>Destination 1</h3>
+      </div>
+      <div class="destination">
+        <img src="destination2.jpg" alt="Destination 2">
+        <h3>Destination 2</h3>
+      </div>
+      <div class="destination">
+        <img src="destination3.jpg" alt="Destination 3">
+        <h3>Destination 3</h3>
+      </div>
+    </section>
+  </main>
 
-<script data-th-src="@{/js/main.js}"></script>
+  <footer>
+    <p>&copy; 2023 Travelo. All rights reserved.</p>
+  </footer>
 </body>
-
 </html>
