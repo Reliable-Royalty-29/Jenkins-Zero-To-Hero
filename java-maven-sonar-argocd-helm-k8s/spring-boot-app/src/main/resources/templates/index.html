@@ -3,142 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Travel Website</title>
+  <title>Netflix Login</title>
   <style>
-    /* Reset styles */
-    body, h1, h2, h3, p, ul, li {
+    body {
       margin: 0;
       padding: 0;
-    }
-
-    body {
       font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    /* Header styles */
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 2rem;
-    }
-
-    nav ul {
-      list-style: none;
-      margin-top: 1rem;
-    }
-
-    nav li {
-      display: inline-block;
-      margin: 0 0.5rem;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-    }
-
-    /* Main styles */
-    .hero {
-      background-image: url("hero.jpg");
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1587710859239-61e25b2bb6c3');
       background-size: cover;
       background-position: center;
-      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      padding: 40px;
       text-align: center;
-      padding: 4rem;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    .hero h2 {
-      font-size: 3rem;
-      margin-bottom: 2rem;
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #e50914;
+      margin-bottom: 20px;
     }
 
-    .btn {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background-color: #ff6600;
+    .login-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .login-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #e50914;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .login-form button:hover {
+      background-color: #d30b10;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 10px;
       color: #fff;
       text-decoration: none;
-      border: none;
-      border-radius: 4px;
     }
 
-    /* Destinations styles */
-    .destinations {
-      text-align: center;
-      padding: 2rem;
+    .signup {
+      margin-top: 20px;
+      font-size: 14px;
     }
 
-    .destinations h2 {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .destination {
-      margin-bottom: 2rem;
-    }
-
-    .destination img {
-      width: 100%;
-      border-radius: 4px;
-    }
-
-    .destination h3 {
-      margin-top: 1rem;
-    }
-
-    /* Footer styles */
-    footer {
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      padding: 1rem;
+    .signup a {
+      color: #e50914;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Travelo</h1>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Destinations</a></li>
-        <li><a href="#">Packages</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <h2>Discover Your Dream Destination</h2>
-      <a href="#" class="btn">Explore Now</a>
-    </section>
-
-    <section class="destinations">
-      <h2>Popular Destinations</h2>
-      <div class="destination">
-        <img src="destination1.jpg" alt="Destination 1">
-        <h3>Destination 1</h3>
-      </div>
-      <div class="destination">
-        <img src="destination2.jpg" alt="Destination 2">
-        <h3>Destination 2</h3>
-      </div>
-      <div class="destination">
-        <img src="destination3.jpg" alt="Destination 3">
-        <h3>Destination 3</h3>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2023 Travelo. All rights reserved.</p>
-  </footer>
+  <div class="container">
+    <div class="logo">Netflix</div>
+    <form class="login-form">
+      <input type="email" placeholder="Email or Phone Number" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Sign In</button>
+      <a class="forgot-password" href="#">Forgot password?</a>
+    </form>
+    <div class="signup">
+      New to Netflix? <a href="#">Sign up now</a>
+    </div>
+  </div>
 </body>
 </html>
