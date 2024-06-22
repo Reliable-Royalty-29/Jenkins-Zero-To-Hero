@@ -63,7 +63,7 @@ A: Again, there are multiple ways to achieve this,
 
 Q: What is latest version of Jenkins or which version of Jenkins are you using ?
 
-A: This is a very simple question interviewers ask to understand if you are actually using Jenkins day-to-day, so always be prepared for this.
+A: In my current setup, I am using Jenkins version 2.361.4. We chose this version because it is an LTS release, ensuring stability and long-term support. We regularly monitor for updates and plan our upgrades accordingly to ensure we are benefiting from the latest improvements while maintaining stability in our CI/CD pipeline.
 
 Q: What is shared modules in Jenkins ?
 
@@ -135,5 +135,127 @@ A: In Jenkins, JNLP is used to allow agents (also known as "slave nodes") to be 
 Q: What are some of the common plugins that you use in Jenkins ?
 
 A: Be prepared for answer, you need to have atleast 3-4 on top of your head, so that interview feels you use jenkins on a day-to-day basis.
+
+Q:  How to setup auto-scaling group for Jenkins in Azure?
+
+A: Setting up an auto-scaling group for Jenkins in Azure involves a few key steps:
+
+1. **Provision Jenkins Master**: Deploy a Jenkins master server in Azure.
+2. **Provision Jenkins Agents**: Use Azure Virtual Machine Scale Sets (VMSS) to dynamically scale Jenkins agents.
+3. **Configure Jenkins to Use VMSS**: Set up Jenkins to use the VMSS for provisioning agents as needed.
+
+Here’s a step-by-step guide:
+
+### Step 1: Provision Jenkins Master
+
+1. **Create a Jenkins Master VM**:
+   - Use the Azure Portal, Azure CLI, or an ARM template to create a VM.
+   - Install Jenkins on the VM by following the [official Jenkins installation guide](https://www.jenkins.io/doc/book/installing/).
+
+2. **Secure Jenkins**:
+   - Configure security settings (e.g., using a secure admin password, enabling HTTPS, setting up firewalls).
+   - Ensure the VM has a public IP or is accessible within your network.
+
+### Step 2: Provision Jenkins Agents Using VMSS
+
+1. **Create a Virtual Machine Scale Set**:
+   - In the Azure Portal, navigate to "Create a resource" and search for "Virtual Machine Scale Sets".
+   - Configure the basic settings (name, region, instance details, image, etc.).
+   - Set the instance count and scaling policies.
+
+2. **Install Jenkins Agent Software on VMSS**:
+   - Use a custom script extension or Azure Automation to automatically install Jenkins agent software on the VMs in the scale set.
+   - The script can be something like:
+     ```sh
+     #!/bin/bash
+     wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+     sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+     sudo apt-get update
+     sudo apt-get install jenkins -y
+     sudo apt-get install openjdk-8-jdk -y
+     ```
+
+3. **Configure Scale Set Autoscaling**:
+   - Define the autoscaling rules based on metrics like CPU usage or memory.
+   - You can set these rules in the "Scaling" section of the VMSS in the Azure Portal.
+
+### Step 3: Configure Jenkins to Use VMSS
+
+1. **Install the Azure VM Agents Plugin**:
+   - Go to Jenkins dashboard > Manage Jenkins > Manage Plugins.
+   - Install the "Azure VM Agents" plugin.
+
+2. **Configure Azure Credentials in Jenkins**:
+   - Go to Jenkins dashboard > Manage Jenkins > Manage Credentials.
+   - Add a new "Microsoft Azure Service Principal" with your Azure credentials (Client ID, Secret, Tenant ID, and Subscription ID).
+
+3. **Configure the Azure VM Agents Plugin**:
+   - Go to Jenkins dashboard > Manage Jenkins > Configure System.
+   - Scroll down to "Cloud" and click "Add a new cloud".
+   - Select "Azure VM Agents".
+   - Fill in the Azure details, including the Resource Group, VMSS Name, and the template for the agent configuration.
+   - Specify the label that will be used to tie jobs to these agents.
+
+4. **Set Up Jenkins Jobs to Use the New Agents**:
+   - In your Jenkins job configurations, set the "Restrict where this project can be run" option to use the label defined for the VMSS agents.
+
+### Example Script for Custom Script Extension
+
+To automate the setup of Jenkins agents on VMSS, you can use the Custom Script Extension. Here’s an example of how you might define this in an ARM template:
+
+```json
+{
+  "type": "Microsoft.Compute/virtualMachineScaleSets",
+  "apiVersion": "2021-03-01",
+  "location": "[resourceGroup().location]",
+  "properties": {
+    "overprovision": true,
+    "upgradePolicy": {
+      "mode": "Manual"
+    },
+    "virtualMachineProfile": {
+      "osProfile": {
+        "computerNamePrefix": "jenkins-agent",
+        "adminUsername": "azureuser",
+        "customData": "[base64(concat('#!/bin/bash\n', 'wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -\n', 'sudo sh -c ''echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list''\n', 'sudo apt-get update\n', 'sudo apt-get install jenkins -y\n', 'sudo apt-get install openjdk-8-jdk -y\n'))]"
+      },
+      "storageProfile": {
+        "imageReference": {
+          "publisher": "Canonical",
+          "offer": "UbuntuServer",
+          "sku": "18.04-LTS",
+          "version": "latest"
+        }
+      },
+      "networkProfile": {
+        "networkInterfaceConfigurations": [
+          {
+            "name": "nic-config",
+            "properties": {
+              "primary": true,
+              "ipConfigurations": [
+                {
+                  "name": "ip-config",
+                  "properties": {
+                    "subnet": {
+                      "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+This script will ensure that every VM instance created within the scale set installs Jenkins and Java, making it ready to act as a Jenkins agent.
+
+### Conclusion
+
+By following these steps, you can set up an auto-scaling group for Jenkins in Azure, ensuring that your build environment can scale dynamically to handle varying workloads efficiently. This setup leverages Azure VM Scale Sets to provide a scalable pool of Jenkins agents that can be provisioned and de-provisioned based on demand.
 
 
